@@ -76,9 +76,6 @@ public class User extends Base implements AuthCachePrincipal {
 	 */
 	@Transient
 	private Integer roleId;
-	private Integer orgId;
-	private Integer companyId;
-	private Integer isDepartmentManager;
 
 	public Integer getId() {
 		return id;
@@ -172,30 +169,6 @@ public class User extends Base implements AuthCachePrincipal {
 	@Override
 	public String getAuthCacheKey() {
 		return String.valueOf(this.id);
-	}
-
-	public Integer getOrgId() {
-		return orgId;
-	}
-
-	public void setOrgId(Integer orgId) {
-		this.orgId = orgId;
-	}
-
-	public Integer getCompanyId() {
-		return companyId;
-	}
-
-	public void setCompanyId(Integer companyId) {
-		this.companyId = companyId;
-	}
-
-	public Integer getIsDepartmentManager() {
-		return isDepartmentManager;
-	}
-
-	public void setIsDepartmentManager(Integer isDepartmentManager) {
-		this.isDepartmentManager = isDepartmentManager;
 	}
 
 }
