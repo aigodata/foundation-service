@@ -3,7 +3,7 @@
     "datasources": {
         "website": {
             // URL
-            "url": "jdbc:mysql://222.169.219.186:30025/financial-budget?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull",
+            "url": "jdbc:mysql://222.169.219.186:30032/foundation?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull",
             // 用户名
             "username": "root",
             // 密码
