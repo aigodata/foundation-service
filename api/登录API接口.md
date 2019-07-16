@@ -4,7 +4,7 @@
 
 - 描述：用户登录系统
 
-- 地址：/api/login
+- 地址：/api/login/sso
 
 - 类型：POST
 
