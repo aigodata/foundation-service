@@ -49,7 +49,7 @@ public class LoginController {
 	 * @return
 	 * @throws Exception
 	 */
-	@PostMapping("/login")
+	@PostMapping("/login/sso")
 	public ResultModel login(@JsonParam String params, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 
