@@ -56,9 +56,8 @@ public class ShiroConfig {
 //	private String password;
 
 	private static final String CACHE_KEY = "shiro:cache:";
-	private static final String SESSION_KEY = "shiro:session:";
-	private static final String NAME = "RESSIONID";
-	private static final String VALUE = "/";
+	private static final String SESSION_KEY = "shiro:token:";
+	private static final String NAME = "token";
 
 	/**
 	 * Shiro 过滤器
@@ -153,7 +152,7 @@ public class ShiroConfig {
 	public SimpleCookie simpleCookie() {
 		SimpleCookie simpleCookie = new SimpleCookie();
 		simpleCookie.setName(NAME);
-		simpleCookie.setValue(VALUE);
+		simpleCookie.setPath("/");
 		return simpleCookie;
 	}
 

@@ -63,7 +63,9 @@ public class LoginController {
 			JsonObject pms = new Gson().fromJson(params, JsonObject.class);
 			username = pms.get("username").getAsString();
 			password = pms.get("password").getAsString();
-			captcha = pms.get("captcha").getAsString();
+			if (captchaEnabled) {
+				captcha = pms.get("captcha").getAsString();
+			}
 			if (pms.has("rememberMe")) {
 				rememberMe = pms.get("rememberMe").getAsBoolean();
 			}
