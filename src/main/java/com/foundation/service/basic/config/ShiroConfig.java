@@ -67,7 +67,7 @@ public class ShiroConfig {
 	@Bean
 	public ShiroFilterFactoryBean shiroFilter() {
 		ShiroFilterFactoryBean bean = new ShiroFilterFactoryBean();
-		bean.setLoginUrl("/login");
+		bean.setLoginUrl("/login/sso");
 		bean.setSecurityManager(securityManager());
 
 		// 添加自定义过滤器
