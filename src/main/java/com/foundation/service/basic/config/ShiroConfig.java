@@ -6,7 +6,6 @@ import java.util.Map;
 import javax.servlet.Filter;
 
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
-import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -52,8 +51,6 @@ public class ShiroConfig {
 
 	@Value("${spring.redis.cluster.nodes}")
 	private String redisCluster;
-//	@Value("${spring.redis.password}")
-//	private String password;
 
 	private static final String CACHE_KEY = "shiro:cache:";
 	private static final String SESSION_KEY = "shiro:token:";
@@ -102,9 +99,12 @@ public class ShiroConfig {
 		// shiro-cache
 //		securityManager.setSessionManager(sessionManager());
 //		securityManager.setCacheManager(cacheManager());
-		// shiro-redis-cache
+		// shiro-redis集群-cache
 		securityManager.setSessionManager(sessionManager(redisSessionDAO(redisManager()), simpleCookie()));
 		securityManager.setCacheManager(redisCacheManager(redisManager()));
+		// shiro-redis-单机-cache
+		//securityManager.setSessionManager(sessionManager(redisSessionDAO(redisSingleManager()), simpleCookie()));
+		//securityManager.setCacheManager(redisCacheManager(redisSingleManager()));
 		return securityManager;
 	}
 
@@ -117,9 +117,37 @@ public class ShiroConfig {
 	public RedisClusterManager redisManager() {
 		RedisClusterManager redisManager = new RedisClusterManager();
 		redisManager.setHost(redisCluster);
-//		redisManager.setPassword(password);
 		return redisManager;
 	}
+	
+	/***
+	@Bean
+	public RedisManager redisSingleManager() {
+		RedisManager redisManager = new RedisManager();
+		redisManager.setHost(redisCluster);
+		return redisManager;
+	}
+
+	@Bean
+	public RedisCacheManager redisCacheManager(RedisManager redisManager) {
+		RedisCacheManager redisCacheManager = new RedisCacheManager();
+		redisCacheManager.setRedisManager(redisManager);
+		redisCacheManager.setExpire(86400);// 单位秒
+		redisCacheManager.setKeyPrefix(CACHE_KEY);
+		return redisCacheManager;
+	}
+	
+
+	@Bean
+	public RedisSessionDAO redisSessionDAO(RedisManager redisManager) {
+		RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
+		redisSessionDAO.setExpire(86400);// 单位秒
+		redisSessionDAO.setKeyPrefix(SESSION_KEY);
+		redisSessionDAO.setRedisManager(redisManager);
+		return redisSessionDAO;
+	}
+	
+	***/
 
 	@Bean
 	public RedisCacheManager redisCacheManager(RedisClusterManager redisManager) {
@@ -129,7 +157,6 @@ public class ShiroConfig {
 		redisCacheManager.setKeyPrefix(CACHE_KEY);
 		return redisCacheManager;
 	}
-
 	@Bean
 	public RedisSessionDAO redisSessionDAO(RedisClusterManager redisManager) {
 		RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
@@ -138,7 +165,7 @@ public class ShiroConfig {
 		redisSessionDAO.setRedisManager(redisManager);
 		return redisSessionDAO;
 	}
-
+	
 	@Bean
 	public DefaultWebSessionManager sessionManager(RedisSessionDAO sessionDAO, SimpleCookie simpleCookie) {
 		DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
@@ -164,9 +191,8 @@ public class ShiroConfig {
 
 	/***
 	 * shiro-cache 开始
-	 * 
-	 * @return
-	 */
+	 *
+	 
 	@Bean
 	public DefaultWebSessionManager sessionManager() {
 		DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
@@ -182,12 +208,11 @@ public class ShiroConfig {
 		cacheManager.setCacheManagerConfigFile(cacheManagerConfigFile);
 		return cacheManager;
 	}
+	
+	*
+	* shiro-cache 结束
+	*/
 
-	/***
-	 * shiro-cache 结束
-	 * 
-	 * @return
-	 */
 
 	/**
 	 * Realm
