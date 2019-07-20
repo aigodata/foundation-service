@@ -49,7 +49,19 @@ public class LoginController {
 	 * @return
 	 * @throws Exception
 	 */
-	@PostMapping("/login/sso")
+	@GetMapping("/login/sso")
+	public ResultModel loginSSO(HttpServletRequest request) {
+		try {
+			String username = request.getParameter("username");
+			String password = request.getParameter("password");
+			loginService.login(username, password, false);
+		} catch (Exception e) {
+			return ResultModel.fail(ResultStatus.SERVER_ERROR.code(), e.getMessage());
+		}
+		return ResultModel.success(SubjectUtil.getUser());
+	}
+
+	@PostMapping("/login")
 	public ResultModel login(@JsonParam String params, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 
@@ -77,7 +89,7 @@ public class LoginController {
 		if (captchaEnabled) {
 			Object sessionCaptcha = session.getAttribute("captcha");
 			if (StringUtil.isNull(sessionCaptcha)) {
-				return ResultModel.fail(ResultStatus.SERVER_ERROR.code(),ResultStatus.CAPTCHA_LOSE.message(),
+				return ResultModel.fail(ResultStatus.SERVER_ERROR.code(), ResultStatus.CAPTCHA_LOSE.message(),
 						Maps.immutableEntry("errorCode", ResultStatus.CAPTCHA_LOSE.code()));
 			}
 			if (Strings.isNullOrEmpty(captcha)) {
