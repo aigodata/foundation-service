@@ -173,3 +173,27 @@
 
     
 
+### 2. ACTION KEY
+
+- 描述：全局API接口加密密钥
+
+- 地址：/api/action/key
+
+- 类型：GET
+
+- 请求：无
+
+- 响应
+
+  ```
+  {
+      "code": 200,
+      "message": "ok",
+      "data": {
+          "key": "qLLdeqlbHyceDInJ", // 随机生成的密钥KEY
+          "iv": "qLLdeqlbHyceDInJ" // 随机生成的密钥IV
+      }
+  }
+  ```
+
+  
