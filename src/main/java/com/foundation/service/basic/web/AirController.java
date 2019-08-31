@@ -10,10 +10,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.foundation.service.basic.common.exception.GlobalException;
 import com.foundation.service.basic.common.util.Encryption;
 import com.foundation.service.basic.model.ResultModel;
+import com.foundation.service.basic.model.ResultModel.ResultStatus;
 import com.github.mengxianun.core.DataResultSet;
 import com.github.mengxianun.core.Translator;
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 
 @RestController
@@ -29,8 +32,8 @@ public class AirController {
 
 	@PostMapping("/action")
 	public ResultModel action(@RequestBody String requestJson) throws Exception {
-		String currentKeyiv = keyiv.get();
 		if (crypt) {
+			String currentKeyiv = getCurrentKey();
 			requestJson = Encryption.desEncrypt(requestJson, currentKeyiv, currentKeyiv).trim();
 		}
 		DataResultSet dataResultSet = translator.translate(requestJson);
@@ -39,6 +42,7 @@ public class AirController {
 		}
 		Object data = dataResultSet.getData();
 		if (crypt) {
+			String currentKeyiv = getCurrentKey();
 			data = Encryption.encrypt(data.toString(), currentKeyiv, currentKeyiv);
 		}
 		return ResultModel.success(data);
@@ -48,6 +52,14 @@ public class AirController {
 	public ResultModel getKey() {
 		keyiv.set(RandomStringUtils.randomAlphabetic(16));
 		return ResultModel.success(ImmutableMap.of("key", keyiv.get(), "iv", keyiv.get()));
+	}
+
+	private String getCurrentKey() {
+		String currentKeyiv = keyiv.get();
+		if (Strings.isNullOrEmpty(currentKeyiv)) {
+			throw new GlobalException(ResultStatus.BAD_REQUEST.code(), "Key error");
+		}
+		return currentKeyiv;
 	}
 
 }
